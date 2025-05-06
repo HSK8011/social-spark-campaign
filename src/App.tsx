@@ -15,6 +15,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Connect from "./pages/Connect";
+import ConnectNew from "./pages/ConnectNew";
 import PublishIndex from "./pages/publish/Index";
 import Schedule from "./pages/publish/Schedule";
 import QueuedPosts from "./pages/publish/QueuedPosts";
@@ -53,6 +54,7 @@ const AppRoutes = () => {
       {/* Protected Routes */}
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/connect" element={<ProtectedRoute><Connect /></ProtectedRoute>} />
+      <Route path="/connect/new" element={<ProtectedRoute><ConnectNew /></ProtectedRoute>} />
       
       {/* Publish Routes */}
       <Route path="/publish" element={<ProtectedRoute><PublishIndex /></ProtectedRoute>} />
