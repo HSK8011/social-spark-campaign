@@ -12,6 +12,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   login: (email: string, password: string) => void;
+  signup: (name: string, email: string, password: string) => void;
   logout: () => void;
 }
 
@@ -55,6 +56,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const signup = (name: string, email: string, password: string) => {
+    // Mock signup - in a real app this would call an API
+    const mockUser = {
+      id: '2',
+      name: name,
+      email: email,
+      role: 'user',
+    };
+    
+    setUser(mockUser);
+    setIsAuthenticated(true);
+    
+    // Store auth state in localStorage
+    localStorage.setItem('auth', JSON.stringify({ 
+      isAuthenticated: true, 
+      user: mockUser 
+    }));
+  };
+
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
@@ -62,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
