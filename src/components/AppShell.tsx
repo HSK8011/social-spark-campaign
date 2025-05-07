@@ -1,6 +1,6 @@
 
-import { ReactNode } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { ReactNode, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/components/Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
@@ -12,11 +12,23 @@ import {
   MessagesSquare,
   BarChart3,
   LogOut,
-  ChevronDown
+  ChevronDown,
+  User,
+  Settings,
+  Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface AppShellProps {
   children: ReactNode;
@@ -25,6 +37,12 @@ interface AppShellProps {
 const AppShell = ({ children }: AppShellProps) => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
   
   const sidebarLinks = [
     { 
@@ -94,19 +112,46 @@ const AppShell = ({ children }: AppShellProps) => {
             </Tooltip>
           </TooltipProvider>
           
-          <div className="flex items-center gap-2">
-            <Avatar>
-              <AvatarImage src="/lovable-uploads/480c164e-86be-4339-bba0-d86dd7ca7153.png" />
-              <AvatarFallback>AT</AvatarFallback>
-            </Avatar>
-            <div className="hidden md:flex flex-col">
-              <div className="flex items-center gap-1">
-                <span className="font-medium text-sm">AIMDek Technologies</span>
-                <ChevronDown className="h-4 w-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center gap-2 cursor-pointer">
+                <Avatar>
+                  <AvatarImage src="/lovable-uploads/480c164e-86be-4339-bba0-d86dd7ca7153.png" />
+                  <AvatarFallback>AT</AvatarFallback>
+                </Avatar>
+                <div className="hidden md:flex flex-col">
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium text-sm">AIMDek Technologies</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs text-gray-400">marketing@aimdek.com</span>
+                </div>
               </div>
-              <span className="text-xs text-gray-400">marketing@aimdek.com</span>
-            </div>
-          </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => navigate('/settings')}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/users')}>
+                  <Users className="mr-2 h-4 w-4" />
+                  <span>Manage Users</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
       

@@ -7,11 +7,23 @@ import { useUsers } from "@/contexts/UsersContext";
 import { Search, Edit, Trash } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const ManageUsers = () => {
-  const { users, addUser, deleteUser } = useUsers();
+  const { users, addUser, deleteUser, updateUser } = useUsers();
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [isEditUserOpen, setIsEditUserOpen] = useState(false);
   const [newUser, setNewUser] = useState({ name: "", email: "", permissions: ["create-post"] });
+  const [editingUser, setEditingUser] = useState({ id: "", name: "", email: "", permissions: [""] });
+  const [searchQuery, setSearchQuery] = useState("");
   
   const handleAddUser = () => {
     if (newUser.name && newUser.email) {
@@ -20,6 +32,30 @@ const ManageUsers = () => {
       setIsAddUserOpen(false);
     }
   };
+  
+  const handleEditClick = (user) => {
+    setEditingUser({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      permissions: user.permissions
+    });
+    setIsEditUserOpen(true);
+  };
+  
+  const handleUpdateUser = () => {
+    updateUser(editingUser.id, {
+      name: editingUser.name,
+      email: editingUser.email,
+      permissions: editingUser.permissions
+    });
+    setIsEditUserOpen(false);
+  };
+  
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   
   return (
     <>
@@ -31,7 +67,12 @@ const ManageUsers = () => {
         <CardContent>
           <div className="relative w-full mb-8 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input placeholder="Search User" className="pl-10" />
+            <Input 
+              placeholder="Search User" 
+              className="pl-10" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
           
           <div className="border rounded-md overflow-hidden">
@@ -45,18 +86,22 @@ const ManageUsers = () => {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">{user.name}</td>
                     <td className="px-6 py-4">{user.email}</td>
                     <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Create Post</span>
-                        <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Connect Accounts</span>
+                      <div className="flex gap-2 flex-wrap">
+                        {user.permissions.includes('create-post') && (
+                          <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Create Post</span>
+                        )}
+                        {user.permissions.includes('connect-accounts') && (
+                          <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Connect Accounts</span>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 flex justify-end gap-2">
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" onClick={() => handleEditClick(user)}>
                         <Edit className="h-5 w-5" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => deleteUser(user.id)}>
@@ -71,6 +116,7 @@ const ManageUsers = () => {
         </CardContent>
       </Card>
       
+      {/* Add User Dialog */}
       <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
         <DialogContent>
           <DialogHeader>
@@ -119,6 +165,54 @@ const ManageUsers = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Edit User Sheet */}
+      <Sheet open={isEditUserOpen} onOpenChange={setIsEditUserOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Edit User</SheetTitle>
+            <SheetDescription>
+              Make changes to user information and permissions.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid items-center gap-4">
+              <Label htmlFor="edit-name">
+                Name
+              </Label>
+              <Input
+                id="edit-name"
+                value={editingUser.name}
+                onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+              />
+            </div>
+            <div className="grid items-center gap-4">
+              <Label htmlFor="edit-email">
+                Email
+              </Label>
+              <Input
+                id="edit-email"
+                type="email"
+                value={editingUser.email}
+                onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+              />
+            </div>
+            <div className="grid items-center gap-4">
+              <Label>Permissions</Label>
+              <div className="flex gap-2 flex-wrap">
+                <div className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Create Post</div>
+                <div className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Connect Accounts</div>
+              </div>
+            </div>
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setIsEditUserOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateUser}>Save Changes</Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </>
   );
 };

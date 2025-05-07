@@ -6,7 +6,9 @@ const ManageUsersPage = () => {
   return (
     <AppShell>
       <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Manage Users</h1>
+        </div>
         <ManageUsersComponent />
       </div>
     </AppShell>
