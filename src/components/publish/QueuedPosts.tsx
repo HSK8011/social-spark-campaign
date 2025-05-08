@@ -1,12 +1,13 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { usePosts } from "@/contexts/PostsContext";
 import { ChevronLeft, ChevronRight, Search, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const QueuedPosts = () => {
   const { queuedPosts } = usePosts();
+  const navigate = useNavigate();
   
   return (
     <Card>
@@ -15,7 +16,7 @@ const QueuedPosts = () => {
           <CardTitle className="text-xl font-semibold">Queued Posts</CardTitle>
           <span className="text-sm text-gray-500">Publish - Queued Posts</span>
         </div>
-        <Button>Schedule Post</Button>
+        <Button onClick={() => navigate('/publish/schedule')}>Schedule Post</Button>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between mb-6">

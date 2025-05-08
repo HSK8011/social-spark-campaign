@@ -1,9 +1,9 @@
-
 export interface User {
-  id: string;
-  name: string;
-  email: string;
-  permissions: string[];
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+  readonly role: string;
+  readonly permissions: string[];
 }
 
 export interface SocialAccount {

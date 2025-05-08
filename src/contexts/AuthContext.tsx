@@ -1,26 +1,31 @@
-
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useMemo } from 'react';
 
 interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+  readonly role: string;
 }
 
 interface AuthContextType {
-  isAuthenticated: boolean;
-  user: User | null;
-  login: (email: string, password: string) => void;
-  signup: (name: string, email: string, password: string) => void;
-  logout: () => void;
+  readonly isAuthenticated: boolean;
+  readonly user: User | null;
+  readonly login: (email: string, password: string) => Promise<void>;
+  readonly signup: (name: string, email: string, password: string) => Promise<void>;
+  readonly logout: () => void;
+  readonly isLoading: boolean;
+}
+
+interface AuthProviderProps {
+  readonly children: ReactNode;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // Check if user is logged in from localStorage
@@ -35,9 +40,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error('Error parsing auth from localStorage:', error);
       }
     }
+    setIsLoading(false);
   }, []);
 
-  const login = (email: string, password: string) => {
+  const login = async (email: string, password: string) => {
     // Mock login - in a real app this would call an API
     const mockUser = {
       id: '1',
@@ -45,6 +51,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: 'marketing@aimdek.com',
       role: 'admin',
     };
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     setUser(mockUser);
     setIsAuthenticated(true);
@@ -56,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const signup = (name: string, email: string, password: string) => {
+  const signup = async (name: string, email: string, password: string) => {
     // Mock signup - in a real app this would call an API
     const mockUser = {
       id: '2',
@@ -64,6 +73,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: email,
       role: 'user',
     };
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     setUser(mockUser);
     setIsAuthenticated(true);
@@ -81,8 +93,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('auth');
   };
 
+  const contextValue = useMemo(() => ({
+    isAuthenticated,
+    user,
+    login,
+    signup,
+    logout,
+    isLoading
+  }), [isAuthenticated, user, isLoading]);
+
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, signup, logout }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

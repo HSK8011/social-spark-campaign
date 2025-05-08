@@ -1,6 +1,5 @@
-
 import { ReactNode, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/components/Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
@@ -35,13 +34,16 @@ interface AppShellProps {
 }
 
 const AppShell = ({ children }: AppShellProps) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(
+    location.pathname.startsWith('/publish') ? '/publish' : null
+  );
   
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/', { replace: true });
   };
   
   const sidebarLinks = [
@@ -58,7 +60,14 @@ const AppShell = ({ children }: AppShellProps) => {
     { 
       path: "/publish", 
       label: "Publish", 
-      icon: <Send className="w-5 h-5" /> 
+      icon: <Send className="w-5 h-5" />,
+      subItems: [
+        { path: "/publish/queued", label: "Queued Posts (20)" },
+        { path: "/publish/schedule", label: "Manage Queue Times" },
+        { path: "/publish/pending-approval", label: "Pending Approval (10)" },
+        { path: "/publish/drafts", label: "Drafts (5)" },
+        { path: "/publish/delivered", label: "Delivered (5)" }
+      ]
     },
     { 
       path: "/engage", 
@@ -160,21 +169,54 @@ const AppShell = ({ children }: AppShellProps) => {
         <aside className="bg-white border-r border-gray-200 w-16 md:w-56">
           <nav className="flex flex-col py-4">
             {sidebarLinks.map((link) => (
-              <NavLink 
-                key={link.path} 
-                to={link.path} 
-                className={({ isActive }) => `
-                  flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50
-                  ${isActive ? 'bg-blue-700 text-white hover:bg-blue-700' : ''}
-                  ${link.path === '/publish' && location.pathname.includes('/publish/') ? 'bg-blue-700 text-white hover:bg-blue-700' : ''}
-                `}
-              >
-                {link.icon}
-                <span className="hidden md:block">{link.label}</span>
-                {link.isPro && (
-                  <span className="hidden md:block ml-auto text-xs font-medium bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">PRO</span>
+              <div key={link.path}>
+                <button 
+                  className={`w-full flex items-center justify-between px-3 py-3 text-gray-700 hover:bg-blue-50 ${
+                    location.pathname.startsWith(link.path) ? 'bg-blue-50' : ''
+                  }`}
+                  onClick={() => {
+                    if (link.subItems) {
+                      setExpandedMenu(expandedMenu === link.path ? null : link.path);
+                    } else {
+                      navigate(link.path);
+                    }
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    {link.icon}
+                    <span className="hidden md:block">{link.label}</span>
+                  </div>
+                  {link.subItems && (
+                    <ChevronDown 
+                      className={`hidden md:block w-4 h-4 transition-transform ${
+                        expandedMenu === link.path ? 'rotate-180' : ''
+                      }`} 
+                    />
+                  )}
+                  {link.isPro && (
+                    <span className="hidden md:block ml-auto text-xs font-medium bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">
+                      PRO
+                    </span>
+                  )}
+                </button>
+                
+                {/* Submenu items */}
+                {link.subItems && expandedMenu === link.path && (
+                  <div className="bg-gray-50">
+                    {link.subItems.map((subItem) => (
+                      <button
+                        key={subItem.path}
+                        className={`w-full text-left px-11 py-2 text-sm text-gray-700 hover:bg-blue-50 ${
+                          location.pathname === subItem.path ? 'bg-blue-50' : ''
+                        }`}
+                        onClick={() => navigate(subItem.path)}
+                      >
+                        {subItem.label}
+                      </button>
+                    ))}
+                  </div>
                 )}
-              </NavLink>
+              </div>
             ))}
           </nav>
         </aside>

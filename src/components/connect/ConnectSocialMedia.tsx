@@ -50,7 +50,7 @@ export const SocialMediaPlatformCard = ({ platform, title, onConnect }: SocialMe
   }
   
   return (
-    <div className="p-6 border rounded-md flex flex-col items-center">
+    <div className="p-4 sm:p-6 border rounded-md flex flex-col items-center">
       {icon}
       <h3 className="mt-4 mb-6 text-center">{title}</h3>
       <Button 
@@ -65,7 +65,7 @@ export const SocialMediaPlatformCard = ({ platform, title, onConnect }: SocialMe
 };
 
 const ConnectSocialMedia = () => {
-  const { accounts, connectAccount, disconnectAccount, removeAccount } = useSocialAccounts();
+  const { accounts, connectAccount, disconnectAccount, reconnectAccount, removeAccount } = useSocialAccounts();
   
   const handleConnect = (platform: SocialAccount['platform']) => {
     const username = prompt(`Enter your ${platform} username`);
@@ -73,7 +73,7 @@ const ConnectSocialMedia = () => {
       connectAccount(platform, username);
     }
   };
-  
+
   // Helper to get platform icon
   const getPlatformIcon = (platform: SocialAccount['platform']) => {
     switch (platform) {
@@ -96,7 +96,7 @@ const ConnectSocialMedia = () => {
 
   return (
     <Card className="mb-8">
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <CardTitle className="text-xl font-semibold">Connected Social Networks</CardTitle>
         <Link to="/connect/new">
           <Button>Connect New Channel</Button>
@@ -111,7 +111,7 @@ const ConnectSocialMedia = () => {
         {/* Connected accounts */}
         <div className="space-y-4">
           {accounts.map((account) => (
-            <div key={account.id} className="flex items-center border rounded-md p-4">
+            <div key={account.id} className="flex flex-col sm:flex-row items-start sm:items-center border rounded-md p-4 gap-4">
               <div className="flex items-center flex-1 gap-3">
                 <div className={`h-8 w-8 rounded-full ${account.status === 'connected' ? 'bg-green-100' : 'bg-red-100'} flex items-center justify-center`}>
                   {account.status === 'connected' ? (
@@ -135,21 +135,35 @@ const ConnectSocialMedia = () => {
                 </div>
               </div>
               
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                 {account.status === 'connected' ? (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => disconnectAccount(account.id)}
-                  >
-                    Disconnect
-                  </Button>
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => disconnectAccount(account.id)}
+                      className="flex-1 sm:flex-none"
+                    >
+                      Disconnect
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="flex-1 sm:flex-none"
+                    >
+                      <Clock className="h-4 w-4" />
+                      <span className="ml-1">Manage Queue Time</span>
+                    </Button>
+                  </>
                 ) : (
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => connectAccount(account.platform, account.username)}
+                    onClick={() => reconnectAccount(account.id)}
+                    className="flex-1 sm:flex-none"
                   >
+                    <RefreshCcw className="h-4 w-4 mr-1" />
                     Reconnect
                   </Button>
                 )}
@@ -158,14 +172,10 @@ const ConnectSocialMedia = () => {
                   variant="outline" 
                   size="sm"
                   onClick={() => removeAccount(account.id)}
+                  className="flex-1 sm:flex-none"
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="ml-1">Remove Channel</span>
-                </Button>
-                
-                <Button variant="outline" size="sm">
-                  <Clock className="h-4 w-4" />
-                  <span className="ml-1">Manage Queue Time</span>
                 </Button>
               </div>
             </div>

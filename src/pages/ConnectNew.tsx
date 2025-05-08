@@ -1,11 +1,9 @@
-
 import AppShell from "@/components/AppShell";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SocialMediaPlatformCard } from "@/components/connect/ConnectSocialMedia";
+import { Card } from "@/components/ui/card";
 import { useSocialAccounts } from "@/contexts/SocialAccountsContext";
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, AlertCircle, Gift } from "lucide-react";
 
 const ConnectNew = () => {
   const { connectAccount } = useSocialAccounts();
@@ -19,75 +17,155 @@ const ConnectNew = () => {
 
   return (
     <AppShell>
-      <div className="p-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-xl font-semibold">Connect New Channel</CardTitle>
-            <Link to="/connect">
-              <Button variant="outline">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+      <div className="p-4 md:p-6">
+        <h1 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6">Connect to Social Network</h1>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8">
+          {/* Connect New Channel Tab */}
+          <div className="lg:col-span-9">
+            <Card className="p-4 md:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 md:mb-6 gap-3">
+                <h2 className="text-lg md:text-xl font-medium">Connect New Channel</h2>
+                <Link to="/connect" className="text-blue-600 hover:text-blue-700 flex items-center gap-1 text-sm md:text-base">
+                  <ArrowLeft className="h-4 w-4" />
                 Back To Channels
-              </Button>
             </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-gray-600 mb-8">
+              </div>
+
+              <div className="text-sm text-gray-600 mb-6 md:mb-8">
               Looking for step-by-step instructions? Visit our Help Center to read our Getting Started guides and learn about supported channel types.
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <SocialMediaPlatformCard 
-                platform="twitter"
-                title="Twitter Profile"
-                onConnect={handleConnect}
-              />
-              
-              <SocialMediaPlatformCard 
-                platform="linkedin"
-                title="LinkedIn Page / Profile"
-                onConnect={handleConnect}
-              />
-              
-              <SocialMediaPlatformCard 
-                platform="pinterest"
-                title="Pinterest Business"
-                onConnect={handleConnect}
-              />
-              
-              <SocialMediaPlatformCard 
-                platform="facebook"
-                title="Facebook Page / Group"
-                onConnect={handleConnect}
-              />
-              
-              <SocialMediaPlatformCard 
-                platform="instagram"
-                title="Instagram Business Account"
-                onConnect={handleConnect}
-              />
-              
-              <SocialMediaPlatformCard 
-                platform="shopify"
-                title="Shopify Store"
-                onConnect={handleConnect}
-              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <div className="border rounded-lg p-4 md:p-6 flex flex-col items-center">
+                  <div className="text-[#1DA1F2] mb-4">
+                    <svg className="h-6 w-6 md:h-8 md:w-8" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                    </svg>
+                  </div>
+                  <h3 className="text-center mb-4 text-sm md:text-base">Twitter Profile</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 text-sm md:text-base"
+                    onClick={() => handleConnect('twitter')}
+                  >
+                    CONNECT
+                  </Button>
+                </div>
+
+                <div className="border rounded-lg p-4 md:p-6 flex flex-col items-center">
+                  <div className="text-[#0A66C2] mb-4">
+                    <svg className="h-6 w-6 md:h-8 md:w-8" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </div>
+                  <h3 className="text-center mb-4 text-sm md:text-base">LinkedIn Page / Profile</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 text-sm md:text-base"
+                    onClick={() => handleConnect('linkedin')}
+                  >
+                    CONNECT
+                  </Button>
+                </div>
+
+                <div className="border rounded-lg p-4 md:p-6 flex flex-col items-center">
+                  <div className="text-[#E60023] mb-4">
+                    <svg className="h-6 w-6 md:h-8 md:w-8" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/>
+                    </svg>
+                  </div>
+                  <h3 className="text-center mb-4 text-sm md:text-base">Pinterest Business</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 text-sm md:text-base"
+                    onClick={() => handleConnect('pinterest')}
+                  >
+                    CONNECT
+                  </Button>
+                </div>
+
+                <div className="border rounded-lg p-4 md:p-6 flex flex-col items-center">
+                  <div className="text-[#1877F2] mb-4">
+                    <svg className="h-6 w-6 md:h-8 md:w-8" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                  </div>
+                  <h3 className="text-center mb-4 text-sm md:text-base">Facebook Page / Group</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 text-sm md:text-base"
+                    onClick={() => handleConnect('facebook')}
+                  >
+                    CONNECT
+                  </Button>
+                </div>
+
+                <div className="border rounded-lg p-4 md:p-6 flex flex-col items-center">
+                  <div className="text-[#E4405F] mb-4">
+                    <svg className="h-6 w-6 md:h-8 md:w-8" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                    </svg>
+                  </div>
+                  <h3 className="text-center mb-4 text-sm md:text-base">Instagram Business Account</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 text-sm md:text-base"
+                    onClick={() => handleConnect('instagram')}
+                  >
+                    CONNECT
+                  </Button>
+                </div>
+
+                <div className="border rounded-lg p-4 md:p-6 flex flex-col items-center">
+                  <div className="text-[#7AB55C] mb-4">
+                    <svg className="h-6 w-6 md:h-8 md:w-8" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5C6.201 22.5 1.5 17.799 1.5 12S6.201 1.5 12 1.5 22.5 6.201 22.5 12 17.799 22.5 12 22.5zm0-19.5c-4.963 0-9 4.037-9 9s4.037 9 9 9 9-4.037 9-9-4.037-9-9-9zm0 16.5c-4.136 0-7.5-3.364-7.5-7.5S7.864 4.5 12 4.5s7.5 3.364 7.5 7.5-3.364 7.5-7.5 7.5z"/>
+                    </svg>
+                  </div>
+                  <h3 className="text-center mb-4 text-sm md:text-base">Shopify Store</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 text-sm md:text-base"
+                    onClick={() => handleConnect('shopify')}
+                  >
+                    CONNECT
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Free Plan Tab */}
+          <div className="lg:col-span-3">
+            <Card className="overflow-hidden">
+              {/* Trial Expiry Notice */}
+              <div className="bg-red-50 px-3 md:px-4 py-2 flex items-center justify-between gap-2 text-xs md:text-sm border-b">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-3 w-3 md:h-4 md:w-4 text-red-500 flex-shrink-0" />
+                  <span>Your trial will expire in 5 days</span>
+                </div>
+                <Button variant="link" className="text-blue-600 font-semibold p-0 text-xs md:text-sm">
+                  Upgrade Now
+                </Button>
             </div>
             
-            <div className="mt-8">
-              <div className="bg-blue-50 rounded-lg p-6 flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <img src="/lovable-uploads/196291a1-714f-4df8-9468-7ea2c6ba51c2.png" alt="Gift" className="w-8 h-8" />
-                    <h3 className="font-medium text-lg">CURRENT PLAN</h3>
+              <div className="p-4 md:p-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-[#40BFFF] rounded-full p-3 md:p-4 mb-4">
+                    <Gift className="h-6 w-6 md:h-8 md:w-8 text-white" />
                   </div>
-                  <h2 className="text-2xl font-bold text-blue-700">FREE PLAN</h2>
-                  <p className="text-gray-600">You've hit your plan limit of 3 connected channels.</p>
+                  <h3 className="text-gray-600 font-medium mb-2 text-sm md:text-base">CURRENT PLAN</h3>
+                  <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">FREE PLAN</h2>
+                  <p className="text-gray-600 mb-6 text-sm md:text-base">You've hit your plan limit of 3 connected channels.</p>
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base">
+                    Upgrade Now
+                  </Button>
                 </div>
-                <Button className="px-8">Upgrade Now</Button>
+              </div>
+            </Card>
               </div>
             </div>
-          </CardContent>
-        </Card>
       </div>
     </AppShell>
   );

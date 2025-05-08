@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { SocialAccount } from '@/types';
 import { toast } from 'sonner';
@@ -8,6 +7,7 @@ interface SocialAccountsContextType {
   loading: boolean;
   connectAccount: (platform: SocialAccount['platform'], username: string) => void;
   disconnectAccount: (id: string) => void;
+  reconnectAccount: (id: string) => void;
   removeAccount: (id: string) => void;
 }
 
@@ -81,13 +81,33 @@ export function SocialAccountsProvider({ children }: { children: ReactNode }) {
     toast.info('Account disconnected');
   };
 
+  const reconnectAccount = (id: string) => {
+    setLoading(true);
+    setAccounts(prev => 
+      prev.map(account => 
+        account.id === id 
+          ? { ...account, status: 'connected' } 
+          : account
+      )
+    );
+    setLoading(false);
+    toast.success('Account reconnected successfully');
+  };
+
   const removeAccount = (id: string) => {
     setAccounts(prev => prev.filter(account => account.id !== id));
     toast.info('Account removed');
   };
 
   return (
-    <SocialAccountsContext.Provider value={{ accounts, loading, connectAccount, disconnectAccount, removeAccount }}>
+    <SocialAccountsContext.Provider value={{ 
+      accounts, 
+      loading, 
+      connectAccount, 
+      disconnectAccount, 
+      reconnectAccount,
+      removeAccount 
+    }}>
       {children}
     </SocialAccountsContext.Provider>
   );

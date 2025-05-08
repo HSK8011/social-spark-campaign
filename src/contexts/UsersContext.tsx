@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { User } from '@/types';
 import { toast } from 'sonner';
@@ -15,19 +14,22 @@ const mockUsers: User[] = [
     id: '1',
     name: 'AIMDek Technologies',
     email: 'info@aimdek.com',
-    permissions: ['create-post', 'connect-accounts']
+    role: 'admin',
+    permissions: ['create-post', 'connect-accounts', 'view-analytics', 'manage-users', 'approve-posts']
   },
   {
     id: '2',
     name: 'AIMDek Marketing',
     email: 'marketing@aimdek.com',
-    permissions: ['create-post', 'connect-accounts']
+    role: 'manager',
+    permissions: ['create-post', 'connect-accounts', 'view-analytics', 'approve-posts']
   },
   {
     id: '3',
     name: 'Tudu Marketing',
     email: 'mkt@tudu.com',
-    permissions: ['create-post', 'connect-accounts']
+    role: 'creator',
+    permissions: ['create-post']
   }
 ];
 
